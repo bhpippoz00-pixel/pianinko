@@ -9,6 +9,9 @@
 <meta name="apple-mobile-web-app-title" content="Pianinko">
 <meta name="theme-color" content="#BCE4FF">
 <title>Kolorowe Pianinko</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&display=swap">
 <style>
@@ -54,7 +57,7 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
 .unit b{font-family:var(--display);font-size:15px;letter-spacing:1.5px;text-transform:uppercase;opacity:.9;display:block}
 .unit span{font-family:var(--display);font-weight:800;font-size:clamp(20px,3vw,28px);line-height:1.1;text-shadow:0 2px 0 rgba(0,0,0,.18)}
 .unit .uico{font-size:40px;line-height:1}
-.node{position:relative;width:92px;height:86px;border-radius:50%;border:none;margin:10px 0 26px;background:var(--c);box-shadow:inset 0 -9px 0 rgba(0,0,0,.18),0 6px 0 rgba(31,45,72,.15);
+.node{position:relative;width:92px;height:86px;border-radius:50%;border:none;margin:30px 0 26px;background:var(--c);box-shadow:inset 0 -9px 0 rgba(0,0,0,.18),0 6px 0 rgba(31,45,72,.15);
   display:grid;place-items:center;font-size:40px;transform:translateX(var(--x));transition:transform .1s}
 .node:active{transform:translateX(var(--x)) translateY(4px)}
 .node.lock{background:var(--lock);font-size:30px;cursor:default;filter:grayscale(1)}
@@ -159,6 +162,35 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
 @keyframes glow{50%{opacity:.25}}
 @keyframes point{50%{transform:translateY(8px)}}
 @keyframes wob{25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+/* streak + review */
+.chip .goal{font-size:13px;color:var(--soft);margin-left:6px}
+.chip.full{border-color:var(--sun);background:#FFF6D6}
+.review{flex:none;width:min(560px,100%);display:flex;align-items:center;gap:14px;border:none;border-radius:22px;padding:14px 18px;margin:6px 0 0;background:var(--panel);box-shadow:0 5px 0 var(--edge);text-align:left;font-family:var(--display);font-weight:800;font-size:22px}
+.review span{font-size:36px}
+.review small{display:block;font-family:var(--body);font-size:14px;color:var(--soft)}
+.goalmsg{font-weight:800;color:var(--go-deep)}
+/* rhythm */
+.rhy{display:flex;gap:clamp(8px,2vw,18px);align-items:flex-end;justify-content:center;flex-wrap:wrap}
+.rb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 10px;border-radius:18px;background:var(--panel);box-shadow:0 4px 0 var(--edge)}
+.rb svg{height:clamp(54px,10vh,80px);width:auto;stroke:var(--ink);stroke-linecap:round}
+.rb b{font-family:var(--display);font-size:clamp(16px,2.4vw,22px)}
+.rb [data-ev].on{stroke:var(--go)}
+.rb.on{background:#E6F8EA}
+.rcue{font-family:var(--display);font-weight:800;font-size:clamp(24px,4.5vw,40px);margin:0}
+/* singing */
+.sing{display:flex;align-items:center;gap:clamp(14px,4vw,40px)}
+.ladder{position:relative;width:86px;height:clamp(130px,26vh,200px);border-radius:43px;background:linear-gradient(#FFE1E1,#E6F8EA 40%,#E6F8EA 60%,#DCEBFF);box-shadow:inset 0 0 0 3px var(--edge)}
+.ladder .tgt{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:46px;border-radius:23px;background:var(--c);display:flex;align-items:center;padding-left:8px;font-size:26px;opacity:.9}
+.ladder .me{position:absolute;left:68%;top:50%;transform:translate(-50%,-50%);font-size:32px;transition:top .12s}
+/* staff */
+.staff{width:min(600px,94vw);height:auto;display:block}
+/* tempo */
+.track{position:relative;width:min(920px,94vw);height:112px;overflow:hidden;border-radius:22px;background:rgba(255,255,255,.6)}
+.hitline{position:absolute;left:14%;top:6px;bottom:6px;width:8px;margin-left:-4px;border-radius:4px;background:var(--ink);opacity:.3}
+.tn{position:absolute;top:50%;left:0;width:58px;height:58px;margin:-29px 0 0 -29px;border-radius:50%;background:var(--c);display:grid;place-items:center;font-size:30px;box-shadow:inset 0 -5px 0 rgba(0,0,0,.15);will-change:transform}
+.tn.hit{opacity:0;scale:1.7;transition:opacity .3s,scale .3s}
+.tn.miss{filter:grayscale(1);opacity:.35}
+.count{font-family:var(--display);font-weight:800;font-size:clamp(60px,12vw,110px);line-height:1;margin:0}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:9;width:100%;height:100%}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media (max-width:620px){.node .nm{display:none}}
@@ -172,6 +204,7 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
     <h1 id="title">Kolorowe Pianinko</h1>
     <div class="lbar" id="lbar" hidden><i id="lprog"></i></div>
     <button class="round" id="listenBtn" aria-label="Posłuchaj jeszcze raz" hidden>👂</button>
+    <div class="chip" id="streakChip" aria-label="Seria dni i dzisiejsza porcja">🔥 <span id="streakN">0</span><small class="goal" id="goalTxt">0/3</small></div>
     <div class="chip" id="starChip" aria-label="Zebrane gwiazdki">⭐ <span id="starCount">0</span></div>
     <div class="chip" id="heard" hidden aria-label="Słyszę"><i id="heardDot"></i><span id="heardTxt">–</span></div>
     <button class="round" id="micBtn" aria-label="Włącz mikrofon">🎤<i class="lvl" id="lvl"></i></button>
@@ -184,6 +217,11 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
     <section class="view" id="lesson" hidden>
       <div class="prompt" id="prompt"></div>
       <div class="lane" id="lane"></div>
+      <div class="row" id="lessonBtns">
+        <button class="pill main" id="clapBtn" hidden>👏 Klaśnij!</button>
+        <button class="pill" id="micAsk" hidden>🎤 Włącz mikrofon</button>
+        <button class="pill" id="skipBtn" hidden>Pomiń ➜</button>
+      </div>
     </section>
 
     <section class="view" id="tune" hidden>
@@ -211,16 +249,19 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
       <div class="stars" id="doneStars"></div>
       <p class="big" id="doneTitle">Brawo!</p>
       <div class="reward" id="reward" hidden><span id="rewardIco"></span>Nowa naklejka!</div>
+      <p class="sub goalmsg" id="goalMsg"></p>
       <div class="row">
         <button class="pill main" id="nextBtn">Dalej ➜</button>
         <button class="pill" id="againBtn">⟲ Jeszcze raz</button>
         <button class="pill" id="replayBtn">▶ Posłuchaj</button>
+        <button class="pill" id="tempoBtn" hidden>🏃 W tempie</button>
       </div>
     </div>
 
     <div class="panel" id="panel" hidden>
       <h2>Dla rodzica</h2>
       <p><b>Palce:</b> kciuk to 1, wskazujący 2, środkowy 3, serdeczny 4, mały 5. W piosenkach gra pokazuje rączkę i świeci palec, którym naciska się klawisz. Prawa rączka zaczyna z kciukiem na czerwonym C (🐞), lewa z małym palcem na czerwonym C. Pilnuj, żeby palce były zaokrąglone, jak gdyby trzymały małą piłeczkę.</p>
+      <p><b>Codzienna porcja:</b> 3 lekcje dziennie. Za każdy dzień z porcją rośnie seria 🔥. „Powtórka” na górze ścieżki wraca do lekcji z najmniejszą liczbą gwiazdek. Rytm można klaskać do mikrofonu albo stukać w klawisze lub przycisk 👏.</p>
       <p>Dziecko idzie ścieżką etapów jak w Duolingo: najpierw poznaje kolory, potem gra schodki, a na końcu całe piosenki, kawałek po kawałku. Każda lekcja daje do 3 gwiazdek, a każdy ukończony etap naklejkę do albumu. Pomyłki nie są karane, wpływają tylko na liczbę gwiazdek.</p>
       <p>Naklej na klawisze prawdziwego pianinka kolorowe naklejki w tych samych kolorach:</p>
       <div class="legend" id="legend"></div>
@@ -239,6 +280,8 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
       </div>
       <label class="opt"><input type="checkbox" id="optHint" checked> Podpowiedź w piosenkach (migający klawisz)</label>
       <label class="opt"><input type="checkbox" id="optHand" checked> Pokazuj rączkę i numery palców</label>
+      <label class="opt"><input type="checkbox" id="optVoice" checked> Lektor czyta polecenia na głos</label>
+      <p class="sub" id="voiceInfo" style="font-size:13px"></p>
       <div class="opt">
         <button class="pill" id="freeBtn">🎨 Swobodne granie</button>
         <button class="pill" id="albumBtn">📒 Album naklejek</button>
@@ -258,6 +301,8 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
         <li>Przełącznik wyciszenia lub cichy tryb może wyłączyć dźwięk gry. Podgłośnij iPada.</li>
         <li>Przy pierwszym włączeniu mikrofonu iPad zapyta o zgodę. Wybierz „Pozwól”.</li>
         <li>Bez pianinka można grać na kolorowych klawiszach na ekranie.</li>
+        <li>Po dodaniu do ekranu początkowego gra działa też bez internetu (po pierwszym otwarciu z Wi-Fi).</li>
+        <li>Lektor używa polskiego głosu iPada. Lepszy głos możesz pobrać w Ustawieniach iPada → Dostępność → Treść mówiona → Głosy → Polski.</li>
       </ul>
       <div class="row" style="justify-content:flex-start"><button class="pill main" id="closePanel">Gotowe</button></div>
     </div>
@@ -271,14 +316,14 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
 (() => {
 /* ================= data ================= */
 const KEYS = [
-  {l:'C', so:'do',  f:261.63, a:'🐞', hex:'#FF4D4D', nm:'czerwony', who:'biedronka'},
-  {l:'D', so:'re',  f:293.66, a:'🦊', hex:'#FF9A2E', nm:'pomarańczowy', who:'lisek'},
-  {l:'E', so:'mi',  f:329.63, a:'🐥', hex:'#FFD43B', nm:'żółty', who:'kurczaczek'},
-  {l:'F', so:'fa',  f:349.23, a:'🐸', hex:'#4CC864', nm:'zielony', who:'żabka'},
-  {l:'G', so:'sol', f:392.00, a:'🐳', hex:'#2F5BD8', nm:'ciemnoniebieski', who:'wieloryb'},
-  {l:'A', so:'la',  f:440.00, a:'🐬', hex:'#5EC8F2', nm:'jasnoniebieski', who:'delfin'},
-  {l:'H', so:'si',  f:493.88, a:'🦄', hex:'#9B5DE5', nm:'fioletowy', who:'jednorożec'},
-  {l:'C', so:'do',  f:523.25, a:'🐞', hex:'#FF4D4D', nm:'czerwony (wysokie C)', who:'biedronka'}
+  {l:'C', so:'do',  f:261.63, a:'🐞', hex:'#FF4D4D', nm:'czerwony', who:'biedronka', acc:'biedronkę', loc:'biedronce'},
+  {l:'D', so:'re',  f:293.66, a:'🦊', hex:'#FF9A2E', nm:'pomarańczowy', who:'lisek', acc:'liska', loc:'lisku'},
+  {l:'E', so:'mi',  f:329.63, a:'🐥', hex:'#FFD43B', nm:'żółty', who:'kurczaczek', acc:'kurczaczka', loc:'kurczaczku'},
+  {l:'F', so:'fa',  f:349.23, a:'🐸', hex:'#4CC864', nm:'zielony', who:'żabka', acc:'żabkę', loc:'żabce'},
+  {l:'G', so:'sol', f:392.00, a:'🐳', hex:'#2F5BD8', nm:'ciemnoniebieski', who:'wieloryb', acc:'wieloryba', loc:'wielorybie'},
+  {l:'A', so:'la',  f:440.00, a:'🐬', hex:'#5EC8F2', nm:'jasnoniebieski', who:'delfin', acc:'delfina', loc:'delfinie'},
+  {l:'H', so:'si',  f:493.88, a:'🦄', hex:'#9B5DE5', nm:'fioletowy', who:'jednorożec', acc:'jednorożca', loc:'jednorożcu'},
+  {l:'C', so:'do',  f:523.25, a:'🐞', hex:'#FF4D4D', nm:'czerwony (wysokie C)', who:'biedronka', acc:'biedronkę', loc:'biedronce'}
 ];
 // both C keys are red on the real keyboard, so a red key counts as either C
 const same = (a,b) => a === b || (a % 7 === 0 && b % 7 === 0);
@@ -327,12 +372,23 @@ const UNITS = [
     {id:'ub4', t:'Księżyc: koniec', ty:'song', s:KS2},
     {id:'ub5', t:'W blasku księżyca: cała', ty:'song', s:[KS1,KS2,KS1,KS2].join(' '), song:true}
   ]},
+  {t:'Rytm: ta i ti-ti', ico:'🥁', col:'#FF924C', prize:'🥁', lessons:[
+    {id:'ur1', t:'Klaszczemy: ta', ty:'rhythm', pats:['ta ta ta ta', 'ta ta ta', 'ta ta ta ta']},
+    {id:'ur2', t:'Klaszczemy: ti-ti', ty:'rhythm', pats:['ta ta ti-ti ta', 'ti-ti ta ta', 'ta ti-ti ta ta']},
+    {id:'ur3', t:'Papuga rytmu', ty:'rhythm', pats:['ti-ti ti-ti ta ta', 'ta ti-ti ti-ti ta', 'ti-ti ta ti-ti ta', 'ta ta ti-ti ti-ti']}
+  ]},
+  {t:'Śpiewanki', ico:'🎤', col:'#C77DFF', prize:'🎤', lessons:[
+    {id:'uq1', t:'Zaśpiewaj jak biedronka i wieloryb', ty:'sing', targets:[0,4,0,4]},
+    {id:'uq2', t:'Do, mi, sol', ty:'sing', targets:[0,2,4,2]},
+    {id:'uq3', t:'Śpiewam schodki', ty:'sing', targets:[0,1,2,3,4]}
+  ]},
   {t:'Wlazł kotek', ico:'🐱', col:'#FFB800', prize:'🐱', lessons:[
     {id:'u3a', t:'Kotek: początek', ty:'song', s:'G E E F D D'},
     {id:'u3b', t:'Wlazł kotek na płotek', ty:'song', s:KOTEK1},
     {id:'u3c', t:'Ładna to piosenka', ty:'song', s:KOTEK2},
     {id:'u3d', t:'Papuga: 4 dźwięki', ty:'simon', len:4, pool:5},
     {id:'u3p', t:'Papuga: kotek', ty:'simon', fix:'G E E F D'},
+    {id:'u3r', t:'Rytm kotka', ty:'rhythm', pats:['ta ti-ti ta ti-ti', 'ti-ti ta-a', 'ta ti-ti ta ti-ti ti-ti ta-a']},
     {id:'u3e', t:'Wlazł kotek: cała', ty:'song', s:KOTEK1+' '+KOTEK2, song:true}
   ]},
   {t:'Oda do radości', ico:'🎺', col:'#4CC864', prize:'🎺', lessons:[
@@ -373,11 +429,26 @@ const UNITS = [
     {id:'u6p', t:'Papuga: dzwonki', ty:'simon', fix:'E E E G C D'},
     {id:'u6e', t:'Dzwonią dzwonki sań: cała', ty:'song', s:[SA1,SA2,SA3,SA4].join(' '), song:true}
   ]},
+  {t:'Prawdziwe nuty', ico:'🎼', col:'#6A4C93', prize:'🎼', lessons:[
+    {id:'un1', t:'Nuty: schodki w górę', ty:'song', s:'C D E F G:2', staff:1},
+    {id:'un2', t:'Nuty: schodki w dół', ty:'song', s:'G F E D C:2', staff:1},
+    {id:'un3', t:'Nuty: Wlazł kotek', ty:'song', s:KOTEK1, staff:2},
+    {id:'un4', t:'Nuty: Oda do radości', ty:'song', s:OD1+' '+OD2, staff:2},
+    {id:'un5', t:'Nuty bez kolorów: Gwiazdka', ty:'song', s:GW1+' '+GW2, staff:3},
+    {id:'un6', t:'Nuty bez kolorów: Panie Janie', ty:'song', s:JA1+' '+JA2, staff:3}
+  ]},
+  {t:'Gram w tempie', ico:'🏃', col:'#06A77D', prize:'🏃', lessons:[
+    {id:'ut1', t:'W tempie: bułeczki', ty:'song', s:BU, tempo:true},
+    {id:'ut2', t:'W tempie: Wlazł kotek', ty:'song', s:KOTEK1+' '+KOTEK2, tempo:true},
+    {id:'ut3', t:'W tempie: Oda do radości', ty:'song', s:[OD1,OD2,OD1,OD3].join(' '), tempo:true},
+    {id:'ut4', t:'W tempie: Panie Janie', ty:'song', s:[JA1,JA2].join(' '), tempo:true}
+  ]},
   {t:'Stary Donald farmę miał', ico:'🐮', col:'#8AC926', prize:'🐮', lessons:[
     {id:'ud1', t:'Stary Donald farmę miał', ty:'song', s:SD1},
     {id:'ud2', t:'Ija, ija, o!', ty:'song', s:SD2},
     {id:'ud3', t:'Na tej farmie krówkę miał', ty:'song', s:SD3},
     {id:'ud4', t:'Papuga: farma', ty:'simon', fix:'C C C G A A'},
+    {id:'ud6', t:'Długie ta-a', ty:'rhythm', pats:['ta ta ta-a', 'ti-ti ta ta-a', 'ta ti-ti ta-a', 'ti-ti ti-ti ta-a']},
     {id:'ud5', t:'Stary Donald: cała', ty:'song', s:[SD1,SD2,SD3,SD2,SD1,SD2].join(' '), song:true}
   ]},
   {t:'Mała owieczka', ico:'🐑', col:'#FF6B6B', prize:'🐑', lessons:[
@@ -427,7 +498,10 @@ const store = {
   set(k,v){ try{ localStorage.setItem('pianinko2:'+k, JSON.stringify(v)); }catch(e){} }
 };
 let prog = store.get('prog', {});            // lessonId -> stars
-let opts = Object.assign({labels:'letters', hint:true, hand:true, sens:55}, store.get('opts', {}));
+let opts = Object.assign({labels:'letters', hint:true, hand:true, voice:true, sens:55}, store.get('opts', {}));
+let days = store.get('days', {});          // 'YYYY-MM-DD' -> lessons finished that day
+let seen = store.get('seen', {});          // lessonId -> last time played (ms)
+const GOAL = 3;
 const saveProg = () => store.set('prog', prog);
 const saveOpts = () => store.set('opts', opts);
 
@@ -452,6 +526,48 @@ function tone(i, len=1.3, mul=1){
   micMuteUntil = Math.max(micMuteUntil, performance.now() + Math.min(len, 1)*700);
 }
 function chime(){ [0,2,4,7].forEach((k,n) => setTimeout(() => tone(k,.6), n*110)); }
+
+/* ================= voice ================= */
+// a 5-year-old can't read the prompts, so the iPad's Polish voice says them. The mic ignores everything while it talks.
+const SS = window.speechSynthesis;
+let plVoice = null;
+function pickVoice(){
+  const vs = SS ? SS.getVoices().filter(v => /^pl/i.test(v.lang)) : [];
+  plVoice = vs.find(v => /enhanced|premium|zosia|ewa/i.test(v.name)) || vs[0] || null;
+  const vi = document.getElementById('voiceInfo');
+  if(vi) vi.textContent = !SS ? 'Ta przeglądarka nie ma lektora.' : plVoice ? 'Głos: ' + plVoice.name : 'Nie widzę polskiego głosu. Lektor użyje domyślnego.';
+}
+if(SS){ pickVoice(); SS.onvoiceschanged = pickVoice; }
+function speak(t){
+  if(!opts.voice || !SS || !t) return;
+  SS.cancel();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'pl-PL'; if(plVoice) u.voice = plVoice; u.rate = 0.95; u.pitch = 1.1;
+  u.onend = () => { micMuteUntil = Math.max(micMuteUntil, performance.now() + 250); };
+  SS.speak(u);
+}
+// spoken during the child's own turn only when the mic is off, so the voice never hides a played note
+function speakTurn(t){ if(!micOn) speak(t); }
+const talking = () => !!(opts.voice && SS && SS.speaking);
+const V = (ms, msVoice) => opts.voice && SS ? msVoice : ms;
+const cap = t => t[0].toUpperCase() + t.slice(1);
+const PRAISE = ['Brawo!', 'Super!', 'Pięknie!', 'Tak jest!', 'Świetnie!'];
+const praise = () => PRAISE[Math.floor(Math.random() * PRAISE.length)];
+
+/* clap and metronome: noise bursts with no pitch, so the pitch detector never mistakes them for a key */
+let noiseBuf = null;
+function noise(len, decay, freq, gain){
+  const a = audio();
+  if(!noiseBuf || noiseBuf.sampleRate !== a.sampleRate){
+    noiseBuf = a.createBuffer(1, Math.floor(a.sampleRate * .15), a.sampleRate);
+    const d = noiseBuf.getChannelData(0); for(let i = 0; i < d.length; i++) d[i] = Math.random()*2 - 1;
+  }
+  const t = a.currentTime, src = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+  src.buffer = noiseBuf; f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = .9;
+  g.gain.setValueAtTime(gain, t); g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+  src.connect(f); f.connect(g); g.connect(a.destination); src.start(t); src.stop(t + len);
+}
+function clap(){ noise(.12, .09, 1400, 1.2); micMuteUntil = Math.max(micMuteUntil, performance.now() + 220); }
+function tick(){ noise(.04, .03, 3200, .35); }
 
 /* ================= keyboard ================= */
 const keyEls = KEYS.map((k,i) => {
@@ -483,7 +599,9 @@ function show(v){
   $('app').classList.toggle('playing', playing); $('keys').hidden = !playing;
   $('lbar').hidden = v !== 'lesson'; $('listenBtn').hidden = v !== 'lesson';
   $('title').hidden = v === 'lesson';
-  $('starChip').hidden = v === 'lesson';
+  $('starChip').hidden = v === 'lesson'; $('streakChip').hidden = v === 'lesson' || v === 'tune';
+  ['clapBtn','micAsk','skipBtn'].forEach(b => $(b).hidden = true);
+  if(SS) SS.cancel();
   $('backBtn').textContent = v === 'path' ? '📒' : (v === 'lesson' ? '✕' : '🏠');
   $('backBtn').setAttribute('aria-label', v === 'path' ? 'Album naklejek' : 'Wróć do ścieżki');
   setHint(-1); keyEls.forEach(k => k.classList.remove('dim'));
@@ -503,7 +621,15 @@ function unitDone(ui){ return UNITS[ui].lessons.every(l => prog[l.id] > 0); }
 function renderPath(){
   const box = $('path'); box.innerHTML = '';
   let k = 0, curEl = null; const next = furthest() + 1;
-  $('starCount').textContent = Object.values(prog).reduce((a,b) => a+b, 0);
+  $('starCount').textContent = FLAT.reduce((a,l) => a + (prog[l.id] || 0), 0);
+  renderStreak();
+  const rv = reviewPick();
+  if(rv){
+    const r = document.createElement('button'); r.className = 'review';
+    r.innerHTML = `<span>🔁</span><div>Powtórka<small>${rv.t}</small></div>`;
+    r.addEventListener('click', () => { audio(); startLesson(rv, true); });
+    box.appendChild(r);
+  }
   UNITS.forEach((u,ui) => {
     const h = document.createElement('div'); h.className = 'unit'; h.style.setProperty('--c', u.col);
     h.innerHTML = `<span class="uico">${u.ico}</span><div><b>Etap ${ui+1}</b><span>${u.t}</span></div>`;
@@ -515,7 +641,7 @@ function renderPath(){
       const isCur = idx === next;
       b.className = 'node ' + (st ? 'done' : isCur ? 'cur' : open ? 'open' : 'lock') + (x > 20 ? ' right' : '');
       b.style.setProperty('--x', x + 'px'); b.style.setProperty('--c', u.col);
-      const ico = l.hand ? '✋' : l.ty === 'find' ? '👀' : l.ty === 'simon' ? '🦜' : l.song ? '🎵' : '🎹';
+      const ico = l.hand ? '✋' : l.ty === 'rhythm' ? '🥁' : l.ty === 'sing' ? '🎤' : l.tempo ? '🏃' : l.staff ? '🎼' : l.ty === 'find' ? '👀' : l.ty === 'simon' ? '🦜' : l.song ? '🎵' : '🎹';
       b.innerHTML = (open ? ico : '🔒') + (st ? `<span class="st">${'⭐'.repeat(st)}</span>` : '') + `<span class="nm">${l.t}</span>`;
       b.setAttribute('aria-label', l.t + (open ? '' : ', zablokowane'));
       if(open) b.addEventListener('click', () => { audio(); startLesson(l); });
@@ -564,16 +690,27 @@ function handSVG(pos, finger, left, big){
 /* ================= lessons ================= */
 let L = null;
 function setProgress(fr){ $('lprog').style.width = Math.round(Math.min(1, fr) * 100) + '%'; }
-function startLesson(l){
+function startLesson(l, review){
   show('lesson');
-  L = {l, mistakes:0, pos:0, busy:false};
+  L = {l, mistakes:0, pos:0, busy:false, review:!!review, wrongNow:0};
+  seen[l.id] = Date.now(); store.set('seen', seen);
   $('lane').innerHTML = ''; $('prompt').innerHTML = ''; setProgress(0);
-  $('listenBtn').hidden = l.ty === 'find';
-  if(l.ty === 'song') songStart();
+  $('lane').hidden = l.ty === 'rhythm' || l.ty === 'sing';
+  $('listenBtn').hidden = l.ty === 'find' || !!l.tempo;
+  if(l.ty === 'song' && l.tempo) tempoStart();
+  else if(l.ty === 'song') songStart();
+  if(l.ty === 'rhythm') rhythmStart();
+  if(l.ty === 'sing') singStart();
   if(l.ty === 'find') findStart();
   if(l.ty === 'simon') simonStart();
 }
-$('listenBtn').addEventListener('click', () => { if(!L) return; if(L.l.ty === 'song') songDemo(); else if(L.l.ty === 'simon' && L.seq && !L.busy) simonPlay(); });
+$('listenBtn').addEventListener('click', () => {
+  if(!L) return;
+  if(L.l.ty === 'song' && !L.l.tempo) songDemo();
+  else if(L.l.ty === 'simon' && L.seq && !L.busy) simonPlay();
+  else if(L.l.ty === 'rhythm' && !L.busy) rhythmPlay();
+  else if(L.l.ty === 'sing' && !L.busy) singPlay();
+});
 
 function press(i, src){
   if(src !== 'mic') tone(i);
@@ -582,13 +719,16 @@ function press(i, src){
   if(view === 'free') freePop(i);
   else if(view === 'tune') tuneHit(i);
   else if(view === 'lesson' && L && $('done').hidden){
-    if(L.l.ty === 'song') songPress(i);
-    else if(L.l.ty === 'find') findPress(i);
-    else simonPress(i);
+    const ty = L.l.ty;
+    if(ty === 'song') L.l.tempo ? tempoPress(i, src) : songPress(i);
+    else if(ty === 'find') findPress(i);
+    else if(ty === 'simon') simonPress(i);
+    else if(ty === 'rhythm') rhythmTap();
   }
 }
 function expected(){
   if(!L) return -1;
+  if(L.l.ty === 'song' && L.l.tempo) return tempoNext()?.k ?? -1;
   if(L.l.ty === 'song') return L.l.notes[L.pos]?.k ?? -1;
   if(L.l.ty === 'find') return L.targets[L.pos] ?? -1;
   if(L.l.ty === 'simon' && !L.busy) return L.seq?.[L.pos] ?? -1;
@@ -605,7 +745,8 @@ function songStart(){
 }
 function renderLane(){
   const notes = L.l.notes, lane = $('lane'); lane.innerHTML = '';
-  notes.slice(L.pos, L.pos + 7).forEach((n,j) => {
+  if(L.l.staff) lane.innerHTML = staffSVG(notes.slice(L.pos, L.pos + 7), L.l.staff);
+  else notes.slice(L.pos, L.pos + 7).forEach((n,j) => {
     const d = document.createElement('div'); d.className = 'note' + (j === 0 ? ' now' : '');
     d.style.setProperty('--c', KEYS[n.k].hex); d.textContent = KEYS[n.k].a;
     if(n.lh >= 0){ const b = document.createElement('span'); b.className = 'lh'; b.style.setProperty('--c', KEYS[n.lh].hex); b.textContent = 'L ' + KEYS[n.lh].l; d.appendChild(b); }
@@ -617,20 +758,27 @@ function renderLane(){
   if(!L.busy && cur){
     const hasLH = notes.some(n => n.lh >= 0), fr = L.l.fing[L.pos];
     let lh = -1; if(hasLH) for(let j = L.pos; j >= 0; j--) if(notes[j].lh >= 0){ lh = notes[j].lh; break; }
+    L.lh2 = hasLH; L.heldPc = lh >= 0 ? lh % 7 : -1;
     let html = '<div class="hands">';
     if(hasLH){ const lf = 5 - lh; html += `<figure>${handSVG(0, lf, true)}<figcaption>👈 ${cur.lh >= 0 ? 'Lewa: wciśnij i trzymaj' : 'Lewa trzyma'} · ${lf}</figcaption></figure>`; }
     if(opts.hand || L.l.hand) html += `<figure>${handSVG(fr.pos, fr.f, !!L.l.left, !!L.l.hand)}<figcaption>${KEYS[cur.k].a} palec ${fr.f} · ${FNAME[fr.f]}</figcaption></figure>`;
     else if(!hasLH) html += `<div class="cue">👆</div>`;
     $('prompt').innerHTML = html + '</div>';
   }
-  setHint(opts.hint && !L.busy && L.pos < notes.length ? notes[L.pos].k : -1);
+  // with real notes the blinking key would give the answer away: from level 2 it shows only after two misses
+  const hintOk = !L.l.staff || L.l.staff < 2 || L.wrongNow >= 2;
+  setHint(opts.hint && hintOk && !L.busy && L.pos < notes.length ? notes[L.pos].k : -1);
 }
 function songDemo(){
   const tok = ++playToken, notes = L.l.notes; let t = 300;
   L.busy = true; setHint(-1);
   $('prompt').innerHTML = `<div class="cue">👂</div><p class="big">Posłuchaj…</p>`;
   notes.forEach(n => { setTimeout(() => { if(tok !== playToken) return; playNote(n); }, t); t += n.d * TEMPO; });
-  setTimeout(() => { if(tok !== playToken || !L) return; L.busy = false; $('prompt').innerHTML = `<div class="cue">👆</div><p class="big">Twoja kolej!</p>`; renderLane(); }, t + 250);
+  setTimeout(() => {
+    if(tok !== playToken || !L) return; L.busy = false; $('prompt').innerHTML = `<div class="cue">👆</div><p class="big">Twoja kolej!</p>`; renderLane();
+    const fr = L.l.fing[L.pos], k = KEYS[notes[L.pos].k];
+    speak(L.l.staff >= 2 ? 'Twoja kolej! Czytaj nutki.' : opts.hand || L.l.hand ? `Twoja kolej! ${cap(FNAME[fr.f])} na ${k.loc}.` : 'Twoja kolej!');
+  }, t + 250);
 }
 function songPress(i){
   if(L.busy){ // a press during the demo skips it
@@ -638,8 +786,12 @@ function songPress(i){
     $('prompt').innerHTML = `<div class="cue">👆</div><p class="big">Twoja kolej!</p>`; renderLane(); return;
   }
   const want = L.l.notes[L.pos].k;
-  if(same(i, want)){ L.pos++; renderLane(); if(L.pos >= L.l.notes.length){ setHint(-1); setTimeout(finishLesson, 450); } }
-  else { L.mistakes++; wrong(i); }
+  if(same(i, want)){
+    L.pos++; L.wrongNow = 0; renderLane();
+    if(L.pos >= L.l.notes.length){ setHint(-1); setTimeout(finishLesson, 450); }
+    else if(L.l.hand) speakTurn(cap(FNAME[L.l.fing[L.pos].f]));
+  }
+  else { L.mistakes++; L.wrongNow++; wrong(i); if(L.l.staff >= 2 && L.wrongNow === 2) renderLane(); }
 }
 
 /* --- find the color --- */
@@ -652,18 +804,19 @@ function findShow(){
   const k = L.targets[L.pos];
   $('prompt').innerHTML = `<div class="target" style="--c:${KEYS[k].hex}">${KEYS[k].a}</div><p class="big">Gdzie jest ${KEYS[k].who}?</p>`;
   setProgress(L.pos / L.targets.length); setHint(-1); L.wrongNow = 0;
-  setTimeout(() => { if(L && L.l.ty === 'find' && L.targets[L.pos] === k) tone(k, .8); }, 350);
+  speak(`Gdzie jest ${KEYS[k].who}?`);
+  setTimeout(() => { if(L && L.l.ty === 'find' && L.targets[L.pos] === k) tone(k, .8); }, V(350, 1500));
 }
 function findPress(i){
   if(L.pos >= L.targets.length || L.busy) return;
   const k = L.targets[L.pos];
   if(same(i, k)){
     L.pos++; L.busy = true; setHint(-1);
-    $('prompt').querySelector('.big').textContent = 'Tak! 🎉';
+    $('prompt').querySelector('.big').textContent = 'Tak! 🎉'; speak(praise());
     setTimeout(() => { if(!L) return; L.busy = false; if(L.pos >= L.targets.length){ setProgress(1); finishLesson(); } else findShow(); }, 700);
   } else {
     L.mistakes++; L.wrongNow++; wrong(i);
-    if(L.wrongNow >= 2) setHint(k);
+    if(L.wrongNow >= 2){ setHint(k); if(L.wrongNow === 2) speak('Zobacz, gdzie miga paluszek.'); }
   }
 }
 
@@ -671,7 +824,8 @@ function findPress(i){
 function simonStart(){
   L.seq = []; L.pos = 0;
   $('prompt').innerHTML = `<div class="cue">🦜</div><p class="big">Papuga zagra, a Ty powtórz!</p>`;
-  L.seq.push(simonNext()); setTimeout(() => L && simonPlay(), 900);
+  speak('Papuga zagra, a ty powtórz!');
+  L.seq.push(simonNext()); setTimeout(() => L && simonPlay(), V(900, 2500));
 }
 function simonNext(){ if(L.l.fixK) return L.l.fixK[L.seq.length]; const max = L.l.pool; let k; do { k = Math.floor(Math.random()*max); } while(L.seq.length && k === L.seq[L.seq.length-1]); return k; }
 function simonPlay(){
@@ -687,6 +841,7 @@ function simonPlay(){
     if(tok !== playToken || !L) return;
     keyEls.forEach(k => k.classList.remove('dim'));
     L.busy = false; $('prompt').innerHTML = `<div class="cue">👆</div><p class="big">Twoja kolej!</p>`;
+    if(L.seq.length === 1) speak('Teraz ty!');
   }, 500 + L.seq.length*750 + 150);
 }
 function simonPress(i){
@@ -696,12 +851,13 @@ function simonPress(i){
     if(L.pos === L.seq.length){
       L.busy = true; setProgress(L.seq.length / L.l.len);
       if(L.seq.length >= L.l.len){ setTimeout(finishLesson, 500); }
-      else { $('prompt').innerHTML = `<div class="cue">😃</div><p class="big">Brawo! Jeszcze jeden…</p>`; setTimeout(() => { if(!L) return; L.seq.push(simonNext()); simonPlay(); }, 1100); }
+      else { $('prompt').innerHTML = `<div class="cue">😃</div><p class="big">Brawo! Jeszcze jeden…</p>`; speak('Brawo! Jeszcze jeden.'); setTimeout(() => { if(!L) return; L.seq.push(simonNext()); simonPlay(); }, V(1100, 2000)); }
     }
   } else {
     L.mistakes++; wrong(i); L.busy = true;
     $('prompt').innerHTML = `<div class="cue">🙈</div><p class="big">Ups! Posłuchaj jeszcze raz</p>`;
-    setTimeout(() => L && simonPlay(), 1300);
+    speak('Ups! Posłuchaj jeszcze raz.');
+    setTimeout(() => L && simonPlay(), V(1300, 2400));
   }
 }
 
@@ -712,16 +868,22 @@ function finishLesson(){
   const unitWasDone = unitDone(l.unit);
   prog[l.id] = Math.max(prog[l.id] || 0, stars); saveProg();
   const newSticker = !unitWasDone && unitDone(l.unit);
+  const today = dayKey(); days[today] = (days[today] || 0) + 1; store.set('days', days);
+  const goalNow = days[today] === GOAL;
+  renderStreak();
+  $('goalMsg').textContent = goalNow ? `Dzisiejsza porcja zrobiona! 🔥 Seria: ${streak()} ${streak() === 1 ? 'dzień' : 'dni'}` : days[today] < GOAL ? `Dzisiaj: ${days[today]} z ${GOAL} lekcji` : '';
+  speak((stars === 3 ? 'Super! Trzy gwiazdki!' : stars === 2 ? 'Brawo! Dwie gwiazdki!' : 'Udało się!') + (newSticker ? ' Nowa naklejka!' : '') + (goalNow ? ' Dzisiejsza porcja zrobiona!' : ''));
   setProgress(1); setHint(-1);
   $('doneStars').innerHTML = [1,2,3].map(s => `<span class="${s <= stars ? '' : 'off'}">⭐</span>`).join('');
   $('doneTitle').textContent = stars === 3 ? 'Super! Brawo!' : stars === 2 ? 'Brawo!' : 'Udało się!';
   $('reward').hidden = !newSticker; $('rewardIco').textContent = UNITS[l.unit].prize;
   $('replayBtn').hidden = l.ty !== 'song';
+  $('tempoBtn').hidden = !(l.ty === 'song' && !l.tempo && !l.hand && !l.notes.some(n => n.lh >= 0));
   const idx = FLAT.indexOf(l);
   $('nextBtn').textContent = idx < FLAT.length - 1 ? 'Dalej ➜' : 'Ścieżka ➜';
   $('done').hidden = false;
   confetti(); chime();
-  if(l.ty === 'song' && l.song) setTimeout(() => { if(!$('done').hidden && L) playMelody(l.notes); }, 1300);
+  if(l.ty === 'song' && l.song) setTimeout(() => { if(!$('done').hidden && L) playMelody(l.notes); }, V(1300, 3200));
 }
 function playMelody(notes){
   const tok = ++playToken; let t = 0;
@@ -733,6 +895,7 @@ function playNote(n){
 }
 $('nextBtn').addEventListener('click', () => {
   const idx = FLAT.indexOf(L?.l);
+  if(L?.review){ show('path'); return; }
   if(idx >= 0 && idx < FLAT.length - 1 && FLAT.indexOf(L.l) >= 0){
     // after a newly finished unit, go back to the path so the child sees the sticker
     if(!$('reward').hidden) { show('path'); return; }
@@ -741,6 +904,229 @@ $('nextBtn').addEventListener('click', () => {
 });
 $('againBtn').addEventListener('click', () => L && startLesson(L.l));
 $('replayBtn').addEventListener('click', () => L && playMelody(L.l.notes));
+$('tempoBtn').addEventListener('click', () => { if(!L) return; const b = L.l; startLesson(Object.assign({}, b, {tempo:true, id:b.id.replace(/_t$/, '') + '_t', t:'W tempie: ' + b.t.replace(/^W tempie: /, '')}), true); });
+
+/* --- daily portion, streak, review --- */
+function dayKey(d = new Date()){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function streak(){
+  const d = new Date(); let n = 0;
+  if(!(days[dayKey(d)] >= GOAL)) d.setDate(d.getDate() - 1);   // today still counts until midnight
+  while(days[dayKey(d)] >= GOAL){ n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+function renderStreak(){
+  const t = days[dayKey()] || 0;
+  $('streakN').textContent = streak(); $('goalTxt').textContent = Math.min(t, GOAL) + '/' + GOAL;
+  $('streakChip').classList.toggle('full', t >= GOAL);
+}
+// the finished lesson with the fewest stars, and among those the one not played for longest
+function reviewPick(){
+  const done = FLAT.filter(l => prog[l.id] > 0);
+  if(done.length < 3) return null;
+  return done.slice().sort((a,b) => (prog[a.id] - prog[b.id]) || ((seen[a.id] || 0) - (seen[b.id] || 0)))[0];
+}
+
+/* --- real notes on a staff: level 1 coloured with animals, 2 coloured, 3 black --- */
+const STEP = [-2,-1,0,1,2,3,4,5];   // staff steps from the bottom line (E4) for C D E F G A H c
+function staffSVG(notes, level){
+  const W = 600, H = 160, gap = 16, bottom = 108, x0 = 70, dx = 76;
+  let g = '';
+  for(let i = 0; i < 5; i++) g += `<line x1="10" x2="${W-10}" y1="${bottom - i*gap}" y2="${bottom - i*gap}" stroke="#1F2D48" stroke-width="2" opacity=".55"/>`;
+  g += `<text x="16" y="${bottom - 6}" font-size="74" fill="#1F2D48" opacity=".8" font-family="serif">𝄞</text>`;
+  notes.forEach((n,j) => {
+    const x = x0 + 30 + j*dx, st = STEP[n.k], y = bottom - st*gap/2, now = j === 0, sc = now ? 1.35 : 1;
+    const fill = level === 3 ? '#1F2D48' : KEYS[n.k].hex, open = n.d >= 2;
+    if(now) g += `<circle cx="${x}" cy="${y}" r="27" fill="#fff" stroke="${level === 3 ? '#1F2D48' : KEYS[n.k].hex}" stroke-width="4" opacity=".95"/>`;
+    if(st <= -2) g += `<line x1="${x-18*sc}" x2="${x+18*sc}" y1="${bottom + gap}" y2="${bottom + gap}" stroke="#1F2D48" stroke-width="2.5"/>`;
+    const up = st < 4, sx = up ? x + 10*sc : x - 10*sc;
+    g += `<line x1="${sx}" x2="${sx}" y1="${y}" y2="${up ? y - 46*sc : y + 46*sc}" stroke="#1F2D48" stroke-width="${now ? 3.5 : 2.5}"/>`;
+    g += `<ellipse cx="${x}" cy="${y}" rx="${11*sc}" ry="${8*sc}" transform="rotate(-20 ${x} ${y})" fill="${open ? '#fff' : fill}" stroke="${open ? fill : '#1F2D48'}" stroke-width="${open ? 4 : 1.5}"/>`;
+    if(level === 1) g += `<text x="${x}" y="${H - 4}" text-anchor="middle" font-size="${now ? 26 : 20}">${KEYS[n.k].a}</text>`;
+  });
+  return `<svg class="staff" viewBox="0 0 ${W} ${H}" role="img" aria-label="Nuty">${g}</svg>`;
+}
+
+/* --- tempo mode: notes slide to the line and the song does not wait --- */
+function tempoNext(){ return L && L.ev ? L.ev.find(e => e.st === 0) : null; }
+function tempoStart(){
+  const beat = TEMPO * 1.35; let t = 0;
+  L.beat = beat; L.ppb = 150; L.hits = 0;
+  $('prompt').innerHTML = `<div class="cue">🏃</div><p class="big">Graj razem z muzyką!</p>`;
+  $('lane').innerHTML = `<div class="track" id="track"><div class="hitline"></div></div>`;
+  L.ev = L.l.notes.map(n => { const el = document.createElement('div'); el.className = 'tn'; el.style.setProperty('--c', KEYS[n.k].hex); el.textContent = KEYS[n.k].a;
+    $('track').appendChild(el); const e = {k:n.k, t, st:0, el}; t += n.d * beat; return e; });
+  L.total = t; L.nextBeat = 0;
+  speak('Graj razem z muzyką! Trafiaj, kiedy zwierzątko dojdzie do kreski.');
+  const lead = V(700, 3200), tok = L.tempoTok = ++playToken;
+  L.t0 = performance.now() + lead + 3*beat;
+  [3,2,1].forEach((c,i) => setTimeout(() => { if(tok !== playToken) return; tick(); $('prompt').innerHTML = `<p class="count">${c}</p>`; }, lead + i*beat));
+  setTimeout(() => { if(tok === playToken) $('prompt').innerHTML = `<div class="cue">🎶</div>`; }, lead + 3*beat);
+  requestAnimationFrame(() => tempoTick(tok));
+}
+function tempoTick(tok){
+  if(!L || tok !== playToken || view !== 'lesson') return;
+  const now = performance.now() - L.t0, tr = $('track'), hx = tr.clientWidth * .14, ppm = L.ppb / L.beat;
+  let next = null;
+  L.ev.forEach(e => {
+    e.el.style.transform = `translateX(${hx + (e.t - now) * ppm}px)`;
+    if(e.st === 0){ if(now - e.t > L.beat * .55){ e.st = -1; e.el.classList.add('miss'); } else if(!next) next = e; }
+  });
+  while(now >= 0 && L.nextBeat <= now){ if(L.nextBeat < L.total) tick(); L.nextBeat += L.beat; }
+  setHint(opts.hint && next && next.t - now < L.beat * 1.1 ? next.k : -1);
+  if(now > 0) setProgress(now / L.total);
+  if(now > L.total + L.beat * .8){ tempoEnd(); return; }
+  requestAnimationFrame(() => tempoTick(tok));
+}
+function tempoPress(i, src){
+  if(!L.ev) return;
+  const now = performance.now() - L.t0 - (src === 'mic' ? 90 : 0);
+  let best = null;
+  L.ev.forEach(e => { if(e.st === 0 && Math.abs(now - e.t) <= L.beat * .55 && (!best || Math.abs(now - e.t) < Math.abs(now - best.t))) best = e; });
+  if(!best) return;
+  if(same(i, best.k)){ best.st = 1; best.el.classList.add('hit'); L.hits++; }
+  else wrong(i);
+}
+function tempoEnd(){
+  playToken++; setHint(-1);
+  const r = L.hits / L.ev.length;
+  L.mistakes = r >= .9 ? 0 : r >= .7 ? 3 : 6;
+  $('prompt').innerHTML = `<p class="big">Trafione: ${L.hits} z ${L.ev.length}</p>`;
+  finishLesson();
+}
+
+/* --- rhythm: Kodály syllables, ta = 1 beat, ti-ti = two halves, ta-a = 2 beats --- */
+const RSVG = {
+  'ta': (e) => `<svg viewBox="0 0 40 64"><line data-ev="${e[0]}" x1="20" y1="6" x2="20" y2="58" stroke-width="7"/></svg>`,
+  'ti-ti': (e) => `<svg viewBox="0 0 64 64"><line data-ev="${e[0]}" x1="14" y1="10" x2="14" y2="58" stroke-width="7"/><line data-ev="${e[1]}" x1="50" y1="10" x2="50" y2="58" stroke-width="7"/><line x1="14" y1="8" x2="50" y2="8" stroke-width="9"/></svg>`,
+  'ta-a': (e) => `<svg viewBox="0 0 54 64"><ellipse data-ev="${e[0]}" cx="22" cy="48" rx="13" ry="10" fill="none" stroke-width="5"/><line data-ev="${e[0]}" x1="35" y1="48" x2="35" y2="6" stroke-width="6"/></svg>`
+};
+function parseRh(p){
+  const tok = [], ev = [];
+  p.split(' ').forEach(s => {
+    const t = {s, ev:[]};
+    (s === 'ti-ti' ? [.5, .5] : [s === 'ta-a' ? 2 : 1]).forEach(d => { t.ev.push(ev.length); ev.push({d, tok:tok.length}); });
+    tok.push(t);
+  });
+  return {tok, ev};
+}
+function rhythmStart(){ L.round = 0; L.fails = 0; $('clapBtn').hidden = false; rhythmRound(true); }
+function rhythmRound(first){
+  const r = parseRh(L.l.pats[L.round]); L.tok = r.tok; L.ev = r.ev;
+  $('prompt').innerHTML = `<p class="rcue" id="rcue"></p><div class="rhy">${L.tok.map((t,i) => `<div class="rb" data-tok="${i}">${RSVG[t.s](t.ev)}<b>${t.s}</b></div>`).join('')}</div>`;
+  setProgress(L.round / L.l.pats.length);
+  rhythmPlay(first);
+}
+function rhOn(i){
+  document.querySelectorAll('.rhy .on').forEach(el => el.classList.remove('on'));
+  if(i < 0 || !L.ev[i]) return;
+  document.querySelectorAll(`.rhy [data-ev="${i}"]`).forEach(el => el.classList.add('on'));
+  document.querySelector(`.rhy [data-tok="${L.ev[i].tok}"]`)?.classList.add('on');
+}
+function rhythmPlay(first){
+  const tok = ++playToken, beat = 600; let t = V(400, first ? 2600 : 1300);
+  L.busy = true; L.taps = []; clearTimeout(L.tapT);
+  $('rcue').textContent = '👂 Posłuchaj…';
+  speak(first ? 'Posłuchaj rytmu i zaklaszcz tak samo. Ta to jedno klaśnięcie, ti-ti to dwa szybkie.' : 'Posłuchaj.');
+  L.ev.forEach((e,i) => { setTimeout(() => { if(tok !== playToken) return; clap(); rhOn(i); }, t); t += e.d * beat; });
+  setTimeout(() => { if(tok !== playToken || !L) return; rhOn(-1); L.busy = false; $('rcue').textContent = '👏 Twoja kolej!'; }, t + 200);
+}
+function rhythmTap(){
+  if(!L || L.l.ty !== 'rhythm' || L.busy) return;
+  L.taps.push(performance.now()); rhOn(L.taps.length - 1);
+  clearTimeout(L.tapT);
+  if(L.taps.length >= L.ev.length) setTimeout(rhythmCheck, 250);
+  else L.tapT = setTimeout(rhythmCheck, 2600);
+}
+// compare gaps between claps with the pattern, at whatever speed the child claps
+function rhythmOk(taps, ev){
+  if(taps.length !== ev.length) return false;
+  if(taps.length < 2) return true;
+  const exp = ev.slice(0, -1).map(e => e.d), got = taps.slice(1).map((t,i) => t - taps[i]);
+  const scale = got.reduce((a,b) => a+b, 0) / exp.reduce((a,b) => a+b, 0);
+  if(scale < 220 || scale > 1600) return false;
+  // each gap close to its share of the child's own tempo, and every long/short change (ti-ti -> ta) really there
+  const l2 = x => Math.abs(Math.log2(x));
+  return got.every((g,i) => l2(g / (exp[i] * scale)) < .55 && (i === 0 || l2((g / got[i-1]) / (exp[i] / exp[i-1])) < .6));
+}
+function rhythmCheck(){
+  if(!L || L.l.ty !== 'rhythm' || L.busy) return;
+  clearTimeout(L.tapT); L.busy = true; rhOn(-1);
+  const ok = rhythmOk(L.taps, L.ev);
+  if(ok || L.fails >= 2){
+    if(!ok) L.mistakes++;
+    L.round++; L.fails = 0; setProgress(L.round / L.l.pats.length);
+    $('rcue').textContent = ok ? '🎉 ' + praise() : '🙂 Dobrze, idziemy dalej';
+    speak(ok ? praise() : 'Dobrze, idziemy dalej.');
+    setTimeout(() => { if(!L) return; L.round >= L.l.pats.length ? finishLesson() : rhythmRound(); }, V(1200, 1800));
+  } else {
+    L.mistakes++; L.fails++;
+    $('rcue').textContent = '🙈 Prawie! Posłuchaj jeszcze raz';
+    speak('Prawie! Posłuchaj jeszcze raz.');
+    setTimeout(() => L && rhythmPlay(), V(1400, 2500));
+  }
+}
+// a clap is a sudden jump in loudness of the newest few milliseconds; its pitch does not matter
+function rhythmMic(TH, now){
+  if(L.busy){ rEnv = 1; return; }
+  let s2 = 0; const n0 = buf.length - 1024; for(let i = n0; i < buf.length; i++) s2 += buf[i]*buf[i];
+  const r = Math.sqrt(s2 / 1024);
+  if(r > Math.max(TH * 1.5, rEnv * 2.5) && now - rLast > 170){ rLast = now; rhythmTap(); }
+  rEnv = Math.max(r, rEnv * .85);
+}
+$('clapBtn').addEventListener('pointerdown', e => { e.preventDefault(); clap(); rhythmTap(); });
+
+/* --- singing: the child sings "laaa" at the same height as the animal's note (any octave) --- */
+function singStart(){ L.pos = 0; $('skipBtn').hidden = false; $('micAsk').hidden = micOn; singShow(true); }
+function singShow(first){
+  const k = L.l.targets[L.pos];
+  L.good = 0;
+  $('prompt').innerHTML = `<div class="sing"><div class="ladder"><div class="tgt" style="--c:${KEYS[k].hex}">${KEYS[k].a}</div><div class="me" id="singMe">🙂</div></div>
+    <div><p class="big">Zaśpiewaj „laaa”</p><p class="sub" id="singTip">jak ${KEYS[k].who} ${KEYS[k].a}</p></div></div>`;
+  $('lane').innerHTML = '';
+  setProgress(L.pos / L.l.targets.length);
+  if(!micOn) $('singTip').textContent = 'Najpierw włącz mikrofon 🎤';
+  singPlay(first);
+}
+function singPlay(first){
+  const k = L.l.targets[L.pos], tok = ++playToken;
+  L.busy = true;
+  speak(first ? `Posłuchaj i zaśpiewaj laaa, tak samo jak ${KEYS[k].who}.` : `Teraz jak ${KEYS[k].who}.`);
+  const t = V(300, first ? 3200 : 1600);
+  setTimeout(() => { if(tok !== playToken) return; tone(k, 1.4); flash(k, 900); }, t);
+  setTimeout(() => { if(tok !== playToken || !L) return; L.busy = false; L.good = 0; }, t + 1700);   // the piano tone has faded
+}
+function singFeed(rms, TH){
+  if(L.busy || !$('done').hidden) return;
+  const me = $('singMe'), tip = $('singTip'); if(!me) return;
+  if(rms < TH * .8){ me.style.top = '50%'; L.good = Math.max(0, L.good - 1); return; }
+  const f = pitch(.75); if(f < 0) return;
+  const k = L.l.targets[L.pos], m = 69 + 12*Math.log2(f/440);
+  const d = (((m - NOMINAL[k]) % 12) + 18) % 12 - 6;
+  me.style.top = (50 - Math.max(-6, Math.min(6, d)) * 7) + '%';
+  if(Math.abs(d) <= 1){ L.good++; tip.textContent = '✓ Tak trzymaj!'; me.textContent = '😃'; }
+  else { L.good = Math.max(0, L.good - 2); tip.textContent = d < 0 ? '⬆ Wyżej!' : '⬇ Niżej!'; me.textContent = '🙂'; }
+  if(L.good >= 18) singHit(true);
+}
+function singHit(ok){
+  L.busy = true; if(!ok) L.mistakes++;
+  $('singTip').textContent = ok ? '🎉 ' + praise() : '➜';
+  if(ok){ speak(praise()); chime(); }
+  setTimeout(() => { if(!L) return; L.pos++; L.pos >= L.l.targets.length ? finishLesson() : singShow(); }, V(900, 1700));
+}
+$('skipBtn').addEventListener('click', () => { if(L && L.l.ty === 'sing' && !L.busy) singHit(false); });
+$('micAsk').addEventListener('click', async () => { await toggleMic(); $('micAsk').hidden = micOn; if(micOn && L && L.l.ty === 'sing') $('singTip').textContent = 'Śpiewaj!'; });
+
+/* --- two hands: is the expected note's own frequency strong in the spectrum? --- */
+function targetHeard(k){
+  if(!fbuf) fbuf = new Float32Array(analyser.frequencyBinCount);
+  analyser.getFloatFrequencyData(fbuf);
+  const hz = ctx.sampleRate / analyser.fftSize, bin = f => Math.round(f / hz);
+  const f0 = 440 * Math.pow(2, ((opts.cal ? opts.cal.m[k] : NOMINAL[k]) - 69) / 12);
+  const at = f => { const b = bin(f); return b > 1 && b < fbuf.length - 1 ? Math.max(fbuf[b-1], fbuf[b], fbuf[b+1]) : -Infinity; };
+  const tgt = Math.max(at(f0), at(f0 * 2), f0 / 2 > 120 ? at(f0 / 2) : -Infinity);
+  let mx = -Infinity; for(let b = bin(120); b < bin(2200); b++) if(fbuf[b] > mx) mx = fbuf[b];
+  return tgt > mx - 8;
+}
 
 /* --- free play --- */
 function freePop(i){
@@ -760,6 +1146,8 @@ $('optHint').checked = opts.hint;
 $('optHint').addEventListener('change', () => { opts.hint = $('optHint').checked; saveOpts(); if(L && L.l.ty === 'song' && !L.busy) renderLane(); });
 $('optHand').checked = opts.hand;
 $('optHand').addEventListener('change', () => { opts.hand = $('optHand').checked; saveOpts(); if(L && L.l.ty === 'song' && !L.busy) renderLane(); });
+$('optVoice').checked = opts.voice;
+$('optVoice').addEventListener('change', () => { opts.voice = $('optVoice').checked; saveOpts(); if(opts.voice) speak('Cześć! Będę mówić, co robić.'); else if(SS) SS.cancel(); });
 $('sens').value = opts.sens;
 $('sens').addEventListener('input', () => { opts.sens = +$('sens').value; saveOpts(); });
 $('resetBtn').addEventListener('click', () => { $('resetYes').hidden = false; say('Na pewno? Gwiazdki i naklejki znikną.'); });
@@ -828,10 +1216,10 @@ async function toggleMic(){
 async function connectMic(){
   try{ if(ctx.state !== 'running') await ctx.resume(); }catch(e){}
   const src = ctx.createMediaStreamSource(micStream);
-  analyser = ctx.createAnalyser(); analyser.fftSize = 4096; src.connect(analyser);
+  analyser = ctx.createAnalyser(); analyser.fftSize = 4096; analyser.smoothingTimeConstant = 0.2; src.connect(analyser); fbuf = null;
   buf = new Float32Array(analyser.fftSize); corr = new Float32Array(2048);
 }
-let peak = 0, diagT = 0, lastHz = 0;
+let peak = 0, diagT = 0, lastHz = 0, quiet = true, onsetT = 0, onsetUsed = true, rEnv = 1, rLast = 0, fbuf = null;
 function diag(rms){
   const now = performance.now(); if(now - diagT < 250 || $('panel').hidden) return; diagT = now;
   $('micDiag').textContent = `Dźwięk: ${ctx.state}, ${ctx.sampleRate} Hz · głośność ${rms.toFixed(4)} (próg ${threshold().toFixed(4)}) · wysokość ${lastHz ? Math.round(lastHz) + ' Hz' : '–'}`;
@@ -887,14 +1275,26 @@ function loop(){
   diag(rms);
   const TH = threshold();
   $('lvl').style.transform = `scaleX(${Math.min(1, rms / TH / 4)})`;
-  if(view === 'tune' && T){ if(!T.test){ tuneFeed(rms); return; } tuneLevel(rms); }
-  if(performance.now() < micMuteUntil){ armed = false; env = rms; cand = -1; stable = 0; return; }
-  if(rms < TH){ armed = true; lastPc = -1; cand = -1; stable = 0; env = rms; return; }
-  if(rms > env * 1.6) armed = true;
+  if(view === 'tune' && T){ if(!T.test){ if(talking()){ T.smp = []; T.cool = performance.now() + 300; return; } tuneFeed(rms); return; } tuneLevel(rms); }
+  const now = performance.now();
+  if(now < micMuteUntil || talking()){ armed = false; env = rms; cand = -1; stable = 0; rEnv = 1; return; }
+  if(view === 'lesson' && L && L.l.ty === 'rhythm'){ rhythmMic(TH, now); return; }
+  if(view === 'lesson' && L && L.l.ty === 'sing'){ singFeed(rms, TH); return; }
+  if(rms < TH){ armed = true; lastPc = -1; cand = -1; stable = 0; env = rms; quiet = true; return; }
+  if(quiet || rms > env * 1.6){ armed = true; onsetT = now; onsetUsed = false; }
+  quiet = false;
   env = Math.max(rms, env * 0.96);
+  // two hands: the held left-hand key keeps ringing and drowns the right hand for a one-note detector,
+  // so right after a new key strike also look for the expected note's own frequency in the spectrum
+  const twoHands = view === 'lesson' && L && L.lh2 && !L.busy && $('done').hidden;
+  if(twoHands && !onsetUsed && now - onsetT < 300){
+    const e = expected();
+    if(e >= 0 && e % 7 !== L.heldPc && targetHeard(e)){ onsetUsed = true; armed = false; lastPc = e % 7; cand = -1; stable = 0; pressPc(e % 7, 'mic'); return; }
+  }
   const f = pitch(); lastHz = f > 0 ? f : 0; if(f < 0){ stable = 0; return; }
   const p = matchKey(f);
   if(p < 0){ stable = 0; return; }
+  if(twoHands && p === L.heldPc && expected() % 7 !== p){ stable = 0; return; }
   if(p === cand) stable++; else { cand = p; stable = 1; }
   if(stable >= 3 && (armed || p !== lastPc)){ lastPc = p; armed = false; pressPc(p, 'mic'); }
 }
@@ -937,7 +1337,7 @@ function tuneFeed(rms){
   tuneLevel(rms);
   if(T.step < 0){
     T.noise.push(rms);
-    if(now - T.t0 > 1500){ const n = T.noise.sort((a,b) => a-b); T.nf = n[Math.floor(n.length * .9)] || 0.0005; T.step = 0; tuneRender(); }
+    if(now - T.t0 > 1500){ const n = T.noise.sort((a,b) => a-b); T.nf = n[Math.floor(n.length * .9)] || 0.0005; T.step = 0; tuneRender(); speak('Naciśnij na pianinku ' + KEYS[0].acc + '.'); }
     return;
   }
   if(now < T.cool) return;
@@ -953,13 +1353,13 @@ function tuneTake(){
   T.smp = []; T.cool = performance.now() + 700;
   // the same sound as an earlier, different key: probably the tail of the last note or a wrong key
   const clash = T.m.findIndex((c,j) => c !== null && j % 7 !== i % 7 && Math.abs((((m - c) % 12) + 18) % 12 - 6) < 0.5);
-  if(clash >= 0){ T.msg = `To brzmiało jak ${KEYS[clash].a}. Naciśnij ${KEYS[i].a} jeszcze raz.`; T.peak = 0; tuneRender(); return; }
+  if(clash >= 0){ T.msg = `To brzmiało jak ${KEYS[clash].a}. Naciśnij ${KEYS[i].a} jeszcze raz.`; T.peak = 0; tuneRender(); speak('Jeszcze raz ' + KEYS[i].acc + '.'); return; }
   T.m[i] = m; T.pk[i] = T.peak; T.peak = 0; T.msg = '';
   flashDot(i); tuneNext();
 }
 function tuneNext(){
   T.step++;
-  if(T.step >= 8) tuneFinish(); else tuneRender();
+  if(T.step >= 8) tuneFinish(); else { tuneRender(); speak((T.step === 7 ? 'Teraz wysoką ' : 'Teraz ') + KEYS[T.step].acc + '.'); }
 }
 function tuneFinish(){
   const pk = T.pk.filter(v => v > 0);
@@ -968,7 +1368,7 @@ function tuneFinish(){
   opts.sens = 55; $('sens').value = 55; saveOpts();
   T.miss = T.m.some(v => v === null); T.test = true; T.step = 8;
   armed = true; lastPc = -1; cand = -1; stable = 0;
-  tuneRender(); tuneState(); chime(); confetti();
+  tuneRender(); tuneState(); chime(); confetti(); speak('Pianinko nastrojone!');
 }
 function flashDot(i){ requestAnimationFrame(() => { const d = $('tuneRow').children[i % 8]; if(!d) return; d.classList.add('hit'); setTimeout(() => d.classList.remove('hit'), 250); }); }
 function tuneHit(i){ if(T && T.test){ flashDot(i); if(i === 0) flashDot(7); } }
@@ -999,6 +1399,7 @@ document.addEventListener('visibilitychange', () => { if(document.visibilityStat
 
 applyLabels();
 show('path');
+if('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) navigator.serviceWorker.register('sw.js').catch(() => {});
 })();
 </script>
 </body>
