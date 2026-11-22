@@ -145,6 +145,7 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
 .seg button.sel{background:var(--ink);color:#fff}
 .legend{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .legend span{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:12px;background:var(--c);font-weight:800;color:#1F2D48}
+.vsel{font-family:var(--body);font-size:16px;font-weight:800;padding:10px 12px;border-radius:12px;border:3px solid var(--edge);background:var(--panel);color:var(--ink);max-width:100%}
 .msg{font-size:15px;color:var(--go-deep);font-weight:800;min-height:1.2em}
 
 /* keyboard */
@@ -281,6 +282,8 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
       <label class="opt"><input type="checkbox" id="optHint" checked> Podpowiedź w piosenkach (migający klawisz)</label>
       <label class="opt"><input type="checkbox" id="optHand" checked> Pokazuj rączkę i numery palców</label>
       <label class="opt"><input type="checkbox" id="optVoice" checked> Lektor czyta polecenia na głos</label>
+      <div class="opt">Głos lektora: <select id="voiceSel" class="vsel"></select> <button class="pill" id="voiceTest">🔊 Posłuchaj</button></div>
+      <label class="opt" for="voiceRate">Tempo mówienia <input type="range" id="voiceRate" min="70" max="115" value="95"></label>
       <p class="sub" id="voiceInfo" style="font-size:13px"></p>
       <div class="opt">
         <button class="pill" id="freeBtn">🎨 Swobodne granie</button>
@@ -302,7 +305,7 @@ button:focus-visible{outline:4px solid var(--ink);outline-offset:3px}
         <li>Przy pierwszym włączeniu mikrofonu iPad zapyta o zgodę. Wybierz „Pozwól”.</li>
         <li>Bez pianinka można grać na kolorowych klawiszach na ekranie.</li>
         <li>Po dodaniu do ekranu początkowego gra działa też bez internetu (po pierwszym otwarciu z Wi-Fi).</li>
-        <li>Lektor używa polskiego głosu iPada. Lepszy głos możesz pobrać w Ustawieniach iPada → Dostępność → Treść mówiona → Głosy → Polski.</li>
+        <li><b>Lepszy lektor:</b> Ustawienia iPada → Dostępność → Treść mówiona → Głosy → Polski → stuknij głos (np. Zosia) → pobierz wersję „Ulepszony” lub „Premium”. Potem zamknij grę całkiem (przesuń w górę w przełączniku aplikacji), otwórz ją ponownie i wybierz głos z ★ powyżej.</li>
       </ul>
       <div class="row" style="justify-content:flex-start"><button class="pill main" id="closePanel">Gotowe</button></div>
     </div>
@@ -531,17 +534,28 @@ function chime(){ [0,2,4,7].forEach((k,n) => setTimeout(() => tone(k,.6), n*110)
 // a 5-year-old can't read the prompts, so the iPad's Polish voice says them. The mic ignores everything while it talks.
 const SS = window.speechSynthesis;
 let plVoice = null;
+// the parent's choice wins; otherwise the best quality Polish voice (iPad names them "Premium"/"Enhanced", in Polish "ulepszony"/"rozszerzony")
+const vQuality = v => /premium|najwy/i.test(v.name) ? 3 : /enhanced|ulepsz|rozszerz|wysok/i.test(v.name) ? 2 : v.localService === false ? 0 : 1;
 function pickVoice(){
   const vs = SS ? SS.getVoices().filter(v => /^pl/i.test(v.lang)) : [];
-  plVoice = vs.find(v => /enhanced|premium|zosia|ewa/i.test(v.name)) || vs[0] || null;
+  const best = vs.slice().sort((a,b) => vQuality(b) - vQuality(a))[0] || null;
+  plVoice = vs.find(v => v.voiceURI === opts.voiceURI) || best;
+  const sel = document.getElementById('voiceSel');
+  if(sel){
+    sel.innerHTML = vs.length ? vs.map(v => `<option value="${v.voiceURI.replace(/"/g,'&quot;')}">${v.name.replace(/</g,'&lt;')}${vQuality(v) >= 2 ? ' ★' : ''}</option>`).join('') : '<option>domyślny głos iPada</option>';
+    if(plVoice) sel.value = plVoice.voiceURI;
+  }
   const vi = document.getElementById('voiceInfo');
-  if(vi) vi.textContent = !SS ? 'Ta przeglądarka nie ma lektora.' : plVoice ? 'Głos: ' + plVoice.name : 'Nie widzę polskiego głosu. Lektor użyje domyślnego.';
+  if(vi) vi.textContent = !SS ? 'Ta przeglądarka nie ma lektora.'
+    : !vs.length ? 'Nie widzę polskiego głosu. Pobierz go w Ustawieniach iPada (instrukcja niżej).'
+    : vs.some(v => vQuality(v) >= 2) ? 'Głosy z ★ brzmią najlepiej.'
+    : 'Masz tylko podstawowe głosy. Lepszy pobierzesz w Ustawieniach iPada (instrukcja niżej).';
 }
 if(SS){ pickVoice(); SS.onvoiceschanged = pickVoice; }
 function speak(t){
   if(!opts.voice || !SS || !t) return;
   SS.cancel();
-  const u = new SpeechSynthesisUtterance(t); u.lang = 'pl-PL'; if(plVoice) u.voice = plVoice; u.rate = 0.95; u.pitch = 1.1;
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'pl-PL'; try{ if(plVoice) u.voice = plVoice; }catch(e){} u.rate = (opts.voiceRate || 95) / 100; u.pitch = 1.05;
   u.onend = () => { micMuteUntil = Math.max(micMuteUntil, performance.now() + 250); };
   SS.speak(u);
 }
@@ -1146,6 +1160,11 @@ $('optHint').checked = opts.hint;
 $('optHint').addEventListener('change', () => { opts.hint = $('optHint').checked; saveOpts(); if(L && L.l.ty === 'song' && !L.busy) renderLane(); });
 $('optHand').checked = opts.hand;
 $('optHand').addEventListener('change', () => { opts.hand = $('optHand').checked; saveOpts(); if(L && L.l.ty === 'song' && !L.busy) renderLane(); });
+$('voiceSel').addEventListener('change', () => { opts.voiceURI = $('voiceSel').value; saveOpts(); pickVoice(); speak('Cześć! Tak brzmię.'); });
+$('voiceTest').addEventListener('click', () => { const was = opts.voice; opts.voice = true; speak('Cześć! Gdzie jest biedronka? Brawo, trzy gwiazdki!'); opts.voice = was; });
+$('voiceRate').value = opts.voiceRate || 95;
+$('voiceRate').addEventListener('change', () => { opts.voiceRate = +$('voiceRate').value; saveOpts(); speak('Tak szybko mówię.'); });
+$('parentBtn').addEventListener('click', pickVoice);   // iPad lists voices late: refresh when the panel opens
 $('optVoice').checked = opts.voice;
 $('optVoice').addEventListener('change', () => { opts.voice = $('optVoice').checked; saveOpts(); if(opts.voice) speak('Cześć! Będę mówić, co robić.'); else if(SS) SS.cancel(); });
 $('sens').value = opts.sens;
